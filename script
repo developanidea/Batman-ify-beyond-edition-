@@ -1,0 +1,43 @@
+(function eternalBatman() {
+    const assets = {
+        images: [
+            'https://raw.githubusercontent.com/developanidea/Batman-ify-beyond-edition-/refs/heads/main/Images/Batman.png',
+            'https://raw.githubusercontent.com/developanidea/Batman-ify-beyond-edition-/refs/heads/main/Images/Batman2.png',
+            'https://raw.githubusercontent.com/developanidea/Batman-ify-beyond-edition-/refs/heads/main/Images/Batman3.png'
+        ],
+        audio: 'https://raw.githubusercontent.com/developanidea/Batman-ify-beyond-edition-/main/Jumpscare.mp3'
+    };
+
+    function deployScare() {
+        /* Randomize assets and timing for the next strike [cite: 2026-03-05] */
+        const randomImg = assets.images[Math.floor(Math.random() * assets.images.length)];
+        const nextDelay = Math.floor(Math.random() * (25000 - 8000) + 8000); 
+
+        /* Create the visual overlay [cite: 2026-03-05] */
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url("${randomImg}") no-repeat center center;
+            background-size: cover; z-index: 2147483647;
+        `;
+
+        /* Audio setup [cite: 2026-03-05] */
+        const sfx = new Audio(assets.audio);
+        sfx.volume = 1.0;
+
+        /* Trigger and Cleanup [cite: 2026-03-05] */
+        document.body.appendChild(overlay);
+        sfx.play().catch(() => {
+            /* Fallback if browser blocks auto-audio [cite: 2026-03-05] */
+        });
+
+        setTimeout(() => {
+            overlay.remove();
+            /* Recursive call to keep the nightmare going [cite: 2026-03-05] */
+            setTimeout(deployScare, nextDelay);
+        }, 2500);
+    }
+
+    /* Initial launch [cite: 2026-03-05] */
+    deployScare();
+})();
